@@ -130,10 +130,10 @@ public class MainActivity extends LifecycleLoggingActivity {
     private Intent makeGalleryIntent(String pathToImageFile) {
         // Create an intent that will start the Gallery app to view
         // the image.
-    	// TODO -- you fill in here, replacing "null" with the proper
-        Intent galleryIntent = new Intent(MainActivity.this, DownloadImageActivity.class);
-    	// code.
-        return null;
+        Intent galleryIntent = new Intent();
+        galleryIntent.setAction(Intent.ACTION_VIEW);
+        galleryIntent.setDataAndType(Uri.parse("file://" + pathToImageFile), "image/*");
+        return galleryIntent;
     }
 
     /**
@@ -143,7 +143,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
         Intent downloadIntent = new Intent(MainActivity.this, DownloadImageActivity.class);
-        downloadIntent.putExtra("url", url);
+        downloadIntent.putExtra("url", url); //TODO check URL not null
         return downloadIntent;
     }
 
