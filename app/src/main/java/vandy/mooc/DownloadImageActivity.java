@@ -1,8 +1,6 @@
 package vandy.mooc;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 /**
@@ -26,7 +24,7 @@ public class DownloadImageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
-        // @@ TODO -- you fill in here.
+        super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
         // @@ TODO -- you fill in here.
