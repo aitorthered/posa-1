@@ -1,7 +1,10 @@
 package vandy.mooc;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
 
 /**
  * An Activity that downloads an image, stores it in a local file on
@@ -27,17 +30,34 @@ public class DownloadImageActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
-        // @@ TODO -- you fill in here.
+        Intent intent = getIntent();
+        final Uri url = Uri.parse(intent.getStringExtra("url"));
 
         // Download the image in the background, create an Intent that
         // contains the path to the image file, and set this as the
         // result of the Activity.
 
-        // @@ TODO -- you fill in here using the Android "HaMeR"
-        // concurrency framework.  Note that the finish() method
-        // should be called in the UI thread, whereas the other
-        // methods should be called in the background thread.  See
-        // http://stackoverflow.com/questions/20412871/is-it-safe-to-finish-an-android-activity-from-a-background-thread
-        // for more discussion about this topic.
+        Thread background = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Uri downloadImg = DownloadUtils.downloadImage(getBaseContext(), url);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = DownloadImageActivity.this.getIntent();
+                        if(downloadImg!= null) {
+                            intent.putExtra("uri", downloadImg.toString());
+                            DownloadImageActivity.this.setResult(RESULT_OK, intent);
+                        }
+                        else{
+                            DownloadImageActivity.this.setResult(RESULT_CANCELED, intent);
+                        }
+                        finish();
+                    }
+                });
+            }
+        });
+        background.start();
     }
 }

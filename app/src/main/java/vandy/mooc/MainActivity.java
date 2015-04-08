@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -84,6 +85,7 @@ public class MainActivity extends LifecycleLoggingActivity {
             // will download the image and then return the Uri for the
             // downloaded image file via the onActivityResult() hook
             // method.
+            Log.i("TAG", getUrl().toString());
             startActivityForResult(myIntent, DOWNLOAD_IMAGE_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +110,9 @@ public class MainActivity extends LifecycleLoggingActivity {
                 // create an Intent that will launch the "Gallery" app
                 // by passing in the path to the downloaded image
                 // file.
-                Intent intentForGallery = makeGalleryIntent("");
+                String url = data.getStringExtra("uri");
+
+                Intent intentForGallery = makeGalleryIntent(url);
 
                 // Start the Gallery Activity.
                 startActivity(intentForGallery);
@@ -117,9 +121,11 @@ public class MainActivity extends LifecycleLoggingActivity {
         // Check if the started Activity did not complete successfully
         // and inform the user a problem occurred when trying to
         // download contents at the given URL.
-        // @@ TODO -- you fill in here, replacing true with the right
-        // code.
         else if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this,
+                    "Problem downloading URL:" +getUrl(),
+                    Toast.LENGTH_SHORT).show();
+
         }
     }    
 
@@ -143,7 +149,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
         Intent downloadIntent = new Intent(MainActivity.this, DownloadImageActivity.class);
-        downloadIntent.putExtra("url", url); //TODO check URL not null
+        downloadIntent.putExtra("url", url.toString()); //TODO check URL not null
         return downloadIntent;
     }
 
@@ -165,7 +171,7 @@ public class MainActivity extends LifecycleLoggingActivity {
         // toast if the URL is invalid.
         // @@ TODO -- you fill in here, replacing "true" with the
         // proper code.
-        if (true)
+        if (url.toString().startsWith("http://") || url.toString().startsWith("https://"))
             return url;
         else {
             Toast.makeText(this,

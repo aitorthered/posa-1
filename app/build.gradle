@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "vandy.mooc"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 22
     }
 
